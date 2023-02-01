@@ -4,11 +4,17 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "nodemon src/main.js",
+    "dev": "pm2 start ./bin/pm2.json --env dev",
+    "prod": "pm2 start ./bin/pm2.json --env pro"
   },
   "author": "wangxin",
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "nodemon": "^2.0.20",
+    "socket.io": "^4.5.4",
     "ws": "^8.12.0"
   }
 }
