@@ -1,0 +1,11 @@
+{
+  "name": "webrtc-signaling",
+  "script": "./src/main.js",
+  "watch": false,
+  "env_dev": {
+    "NODE_ENV": "development"
+  },
+  "env_pro": {
+    "NODE_ENV": "production"
+  }
+}

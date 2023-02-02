@@ -22,13 +22,14 @@ wss.on("connection", connection => {
         switch(data.type) {
             case "login":
                 console.log("User logged in as", data.name);
+                console.log(users, 'users');
                 if (users[data.name]) {
-                    users[data.name] = connection;
-                    connection.name = data.name;
-                    sendTo(connection, {
-                        type: "login",
-                        success: true
-                    });
+                    // users[data.name] = connection;
+                    // connection.name = data.name;
+                    // sendTo(connection, {
+                    //     type: "login",
+                    //     success: true
+                    // });
                     // sendTo(connection, {
                     //     type: "login",
                     //     success: false
@@ -38,7 +39,7 @@ wss.on("connection", connection => {
                     connection.name = data.name;
                     sendTo(connection, {
                         type: "login",
-                        success: true
+                        name: data.name
                     });
                 }
                 break;
@@ -109,6 +110,7 @@ wss.on("connection", connection => {
 });
 
 wss.on("close", function(){
+  console.log(connection, 'connection');
     if(connection.name){
         delete users[connection.name];
 
