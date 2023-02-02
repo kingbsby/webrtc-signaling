@@ -84,6 +84,7 @@ io.sockets.on('connection', (socket) => {
   // disconnect
   socket.on('disconnect', () => {
     const user = users.get(key)
+    if (!user) return
     if (user.room) quitRoom(user.room, key)
     users.delete(key)
     socket.broadcast.emit('leave', key)
@@ -102,6 +103,6 @@ function quitRoom (room, key) {
   if (playMap.size === 0) return rooms.delete(room)
   playMap.forEach((play, _key) => {
     const { socket } = users.get(_key)
-    socket?.emit('quit', { play })
+    socket?.emit('quit', { key })
   })
 }
