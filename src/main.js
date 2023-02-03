@@ -32,13 +32,8 @@ const users = new Map()
 const rooms = new Map()
 
 //HTTP 服务
-<<<<<<< HEAD
 // const http_server = http.createServer(app)
 // http_server.listen(8888)
-=======
-//const http_server = http.createServer(app)
-//http_server.listen(8888)
->>>>>>> e54cde58cd2a6b60a4fa3c725befb5063f96a804
 
 const options = {
   key: path('signaling.refract.top.key'),
@@ -48,12 +43,8 @@ const options = {
 //    path('client-cert.pem')
 //  ]
 }
-<<<<<<< HEAD
 const https_server = https.createServer(options, app)
 https_server.listen(8888)
-=======
-const https_server = https.createServer(options, app).listen(8888)
->>>>>>> e54cde58cd2a6b60a4fa3c725befb5063f96a804
 
 
 
