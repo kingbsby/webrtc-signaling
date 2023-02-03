@@ -3,18 +3,21 @@ const https = require('https')
 const socketIo = require('socket.io')
 const express = require('express')
 const { readFileSync } = require('fs')
+const { join } = require('path')
 
 const app = express()
+
+const path = file => readFileSync(join(__dirname, 'cert', file))
 
 // 设置跨域访问
 app.all("*", function (req, res, next) {
   // 设置允许跨域的域名， * 代表允许任意域名跨域
-  res.header("Access -Control -Allow -Origin", "*")
+  res.header("Access-Control-Allow-Origin", "*")
   // 允许的header 类型
-  res.header("Access -Control -Allow -Headers", "content -type")
+  res.header("Access-Control-Allow-Headers", "content-type")
   // 跨域允许的请求方式
   res.header(
-    "Access -Control -Allow -Methods",
+    "Access-Control-Allow-Methods",
     "DELETE ,PUT ,POST ,GET ,OPTIONS"
   );
   if (req.method.toLowerCase() == "options ") {
@@ -33,11 +36,11 @@ const http_server = http.createServer(app)
 http_server.listen(8888)
 
 const options = {
-  key: readFileSync('./cert/key.pem'),
-  cert: readFileSync('./cert/cert.pem'),
+  key: path('key.pem'),
+  cert: path('cert.pem'),
   requestCert: true,
   ca: [
-    readFileSync('./cert/client-cert.pem')
+    path('client-cert.pem')
   ]
 }
 const https_server = https.createServer(options, app)
