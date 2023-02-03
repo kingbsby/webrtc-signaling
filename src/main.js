@@ -1,11 +1,29 @@
 const http = require('http')
+const https = require('https')
 const socketIo = require('socket.io')
 const express = require('express')
-const cors = require('cors')
+const { readFileSync } = require('fs')
 
 const app = express()
 
-app.use(cors())
+// 设置跨域访问
+app.all("*", function (req, res, next) {
+  // 设置允许跨域的域名， * 代表允许任意域名跨域
+  res.header("Access -Control -Allow -Origin", "*")
+  // 允许的header 类型
+  res.header("Access -Control -Allow -Headers", "content -type")
+  // 跨域允许的请求方式
+  res.header(
+    "Access -Control -Allow -Methods",
+    "DELETE ,PUT ,POST ,GET ,OPTIONS"
+  );
+  if (req.method.toLowerCase() == "options ") {
+    res.send(200) // 让options 尝试请求快速结束
+  } else {
+    next()
+  }
+})
+
 
 const users = new Map()
 const rooms = new Map()
@@ -14,8 +32,19 @@ const rooms = new Map()
 const http_server = http.createServer(app)
 http_server.listen(8888)
 
+const options = {
+  key: readFileSync('./cert/key.pem'),
+  cert: readFileSync('./cert/cert.pem'),
+  requestCert: true,
+  ca: [
+    readFileSync('./cert/client-cert.pem')
+  ]
+}
+const https_server = https.createServer(options, app)
 
-const io = socketIo(http_server, {
+
+
+const io = socketIo(https_server, {
   cors: {
     origin: '*'
   }
@@ -41,21 +70,25 @@ io.sockets.on('connection', (socket) => {
   })
   // offer
   socket.on('offer', ({ offer, toId, type, media, isMeta, play }) => {
+    console.log(`offer - toid: ${toId}, type: ${type}`);
     const { socket } = users.get(toId)
     socket?.emit('offer', { offer, type, media, isMeta, play, from: key })
   })
   // answer
   socket.on('answer', ({ answer, toId, type }) => {
+    console.log(`answer - toid: ${toId}, type: ${type}`);
     const { socket } = users.get(toId)
     socket?.emit('answer', { answer, type, from: key })
   })
   // candidate
   socket.on('candidate', ({ candidate, toId, type }) => {
+    console.log(`candidate - toid: ${toId}, type: ${type}`);
     const { socket } = users.get(toId)
     socket?.emit('candidate', { candidate, type, from: key })
   })
   // close
   socket.on('close', ({ toId, type }) => {
+    console.log(`close - toid: ${toId}, type: ${type}`);
     const { socket } = users.get(toId)
     socket?.emit('close', { type })
     users.set(toId, { socket, room: '' })
