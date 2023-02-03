@@ -32,8 +32,8 @@ const users = new Map()
 const rooms = new Map()
 
 //HTTP 服务
-const http_server = http.createServer(app)
-http_server.listen(8888)
+// const http_server = http.createServer(app)
+// http_server.listen(8888)
 
 const options = {
   key: path('key.pem'),
@@ -44,6 +44,7 @@ const options = {
   ]
 }
 const https_server = https.createServer(options, app)
+https_server.listen(8888)
 
 
 
