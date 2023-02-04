@@ -44,7 +44,9 @@ const options = {
 //  ]
 }
 const https_server = https.createServer(options, app)
-https_server.listen(8888)
+https_server.listen(8888, () => {
+  console.log('server start');
+})
 
 
 
