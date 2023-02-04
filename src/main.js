@@ -139,7 +139,7 @@ io.sockets.on('connection', (socket) => {
  * @returns 
  */
 function quitRoom (room, key) {
-  console.log(`close - type: ${type}`);
+  console.log(`close - key: ${key}`);
   const playMap = rooms.get(room)
   playMap.delete(key)
   console.log(`close - size: ${playMap.size}`);
