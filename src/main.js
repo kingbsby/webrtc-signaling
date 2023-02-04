@@ -95,7 +95,7 @@ io.sockets.on('connection', (socket) => {
     console.log(`close - toid: ${toId}, type: ${type}`);
     const { socket } = users.get(toId)
     socket?.emit('close', { type })
-    users.set(toId, { socket, room: '' })
+    users.set(toId, { socket })
   })
   // join
   socket.on('join', ({ room, play }) => {
@@ -114,12 +114,14 @@ io.sockets.on('connection', (socket) => {
 
   // quit
   socket.on('quit', ({ room }) => {
+    console.log(`quit - room: ${room}`);
     users.set(key, { socket, room: '' })
     quitRoom(room, key)
   })
 
   // disconnect
   socket.on('disconnect', () => {
+    console.log(`disconnect - key: ${key}`);
     const user = users.get(key)
     if (!user) return
     if (user.room) quitRoom(user.room, key)
@@ -135,11 +137,18 @@ io.sockets.on('connection', (socket) => {
  * @returns 
  */
 function quitRoom (room, key) {
+  console.log(`close - toid: ${toId}, type: ${type}`);
   const playMap = rooms.get(room)
   playMap.delete(key)
+  console.log(`close - size: ${playMap.size}`);
   if (playMap.size === 0) return rooms.delete(room)
   playMap.forEach((play, _key) => {
+    console.log(`close - name: ${play.name}`);
     const { socket } = users.get(_key)
     socket?.emit('quit', { key })
   })
 }
+
+setInterval(() => {
+  console.log(new Date().getTime(), 'heartbeat')
+}, 1000)
