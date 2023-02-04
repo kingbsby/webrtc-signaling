@@ -114,6 +114,12 @@ io.sockets.on('connection', (socket) => {
     }
   })
 
+  // failed
+  socket.on('failed', ({ type }) => {
+    console.log(`failed - type: ${type}`);
+    socket.emit('failed', { type })
+  })
+
   // quit
   socket.on('quit', ({ room }) => {
     console.log(`quit - room: ${room}`);
